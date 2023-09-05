@@ -1,25 +1,49 @@
-import { View, Text, TextInput, Pressable } from 'react-native'
+import { View, Text, TextInput, Pressable, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
+import axios from 'axios'
+
+
+const BASE_URL = 'http://51.83.185.187:1337'
 
 const Login = ({navigation}:{navigation:any}) => {
-
+  
   const[username,setUsername] = useState('')
   const[isValidU,setIsValidU] = useState(true)
-
+  
   const[password,setPassword] = useState('')
   const[isValidP,setIsValidP] = useState(true)
-
+  
+  
   const validateUsername = (text: string) => {
     const regex = /^[a-zA-Z0-9]{3,20}$/
     setIsValidU(regex.test(text))
     setUsername(text)
   }
-
+  
   const validatePassword = (text: string) => {
     const regex = /^(?=.*[!@#$%^&*])(?=.*\d)(?=.*[A-Z]).{6,20}$/
     setIsValidP(regex.test(text))
     setPassword(text)
+  }
+  
+  const handleAuth = () => {
+    if(!isValidP || !isValidU){
+      return
+    }
+
+    axios
+      .post(`${BASE_URL}/api/auth/local`,{Username:username,password:password})
+      .then((response:any) => {
+        navigation.navigate('Home')
+        console.log('User profile', response.data.user);
+        console.log('User token', response.data.jwt);
+      })
+      .catch((error:any) => {
+        console.log(username,password)
+        console.log('Login failed',error)
+      })
+
   }
 
   return (
@@ -75,6 +99,7 @@ const Login = ({navigation}:{navigation:any}) => {
             backgroundColor:COLORS.creamy,
             padding:10
           }}
+          secureTextEntry={true}
           placeholder='********'
           onChangeText={validatePassword}
           value={password}
@@ -94,7 +119,7 @@ const Login = ({navigation}:{navigation:any}) => {
             paddingLeft:35,
             justifyContent:'center',
             alignItems:'center'}} 
-            onPress={() => navigation.navigate('Home')}>
+            onPress={handleAuth}>
             <Text style={{color:'#ffffff',fontWeight:'bold',fontSize:20}}>Log In</Text>
           </Pressable>
         </View>
