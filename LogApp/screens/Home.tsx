@@ -1,8 +1,8 @@
-import { View, Text } from 'react-native'
+import { View, Text,Pressable } from 'react-native'
 import React from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 
-const Home = () => {
+const Home = ({navigation}:{navigation:any}) => {
   return (
     <LinearGradient 
         style={{
@@ -10,13 +10,26 @@ const Home = () => {
         }}
         colors={[COLORS.purple,COLORS.creamy]}
     >
-        <View>
-            <Text style={{paddingTop:100,
+        <View style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'center',paddingTop:100,gap:40}} >
+            <Text style={{
               textAlign:"center",
               color:`${COLORS.black}`,
               fontSize:40,
               fontWeight:'bold'
-            }}>Hello World</Text>
+            }}>Hello Home</Text>
+            <Pressable style={{
+            borderWidth:1,
+            borderRadius:50,
+            backgroundColor:COLORS.creamy,
+            display:'flex',
+            padding:10,
+            paddingRight:35,
+            paddingLeft:35,
+            justifyContent:'center',
+            alignItems:'center'}} 
+            onPress={() => navigation.navigate('Login')}>
+            <Text style={{color:COLORS.purple,fontWeight:'bold',fontSize:20}}>Log Out</Text>
+          </Pressable>
         </View>
     </LinearGradient>
   )
