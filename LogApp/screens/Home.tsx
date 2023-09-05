@@ -12,7 +12,7 @@ const Home = ({navigation,route}:{navigation:any,route:any}) => {
   const[description,setDescription]=useState<any[]>([])
 
   useEffect(() => {
-    const {accessToken} = route.params
+    const {accessToken,userId} = route.params
 
     axios
       .get(`${BASE_URL}/api/articles`, {
@@ -21,9 +21,8 @@ const Home = ({navigation,route}:{navigation:any,route:any}) => {
          },
       })
       .then((response) => {
-        setTitle(response.data.data[0].attributes.title)
-        setDescription(response.data.data[0].attributes.description)
-        console.log(response.data.data[0].attributes)
+        setTitle(response.data.data[userId].attributes.title)
+        setDescription(response.data.data[userId].attributes.description)
       })
       .catch((error) => {
         console.error('Błąd podczas pobierania artykułów:', error)
@@ -58,10 +57,10 @@ const Home = ({navigation,route}:{navigation:any,route:any}) => {
             <Text style={{color:COLORS.purple,fontWeight:'bold',fontSize:20}}>Log Out</Text>
           </Pressable>
         </View>
-        <View>
-            <Text>Title: {title}</Text>
-            <Text>Description: {description}</Text>
-        </View>
+        <View style={{display:'flex',padding:10,gap:10}} >
+            <Text style={{fontSize:20}} ><Text style={{fontWeight:'bold'}} >Title:</Text><Text> {title}</Text></Text>
+            <Text style={{fontSize:20}} ><Text style={{fontWeight:'bold'}} >Description:</Text><Text> {description}</Text></Text>        
+            </View>
     </LinearGradient>
   )
 }
