@@ -35,8 +35,9 @@ const Login = ({navigation}:{navigation:any}) => {
     axios
       .post(`${BASE_URL}/api/auth/local`,{identifier:username,password:password})
       .then((response:any) => {
-        navigation.navigate('Home')
-        console.log("Login Accepted",response.data)
+        navigation.navigate('Home',{accessToken:response.data.jwt})
+        console.log('User profile', response.data.user);
+        console.log('User token', response.data.jwt);
       })
       .catch((error:any) => {
         Alert.alert('Login Failed','Try again')

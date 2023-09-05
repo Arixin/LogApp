@@ -1,8 +1,35 @@
-import { View, Text,Pressable } from 'react-native'
-import React from 'react'
+import { View, Text,Pressable,FlatList } from 'react-native'
+import React, { useState,useEffect } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
+import axios from 'axios'
 
-const Home = ({navigation}:{navigation:any}) => {
+
+const BASE_URL = 'http://51.83.185.187:1337'
+
+const Home = ({navigation,route}:{navigation:any,route:any}) => {
+
+  const[title,setTitle]=useState<any[]>([])
+  const[description,setDescription]=useState<any[]>([])
+
+  useEffect(() => {
+    const {accessToken} = route.params
+
+    axios
+      .get(`${BASE_URL}/api/articles`, {
+         headers: {
+           Authorization: `Bearer ${accessToken}`,
+         },
+      })
+      .then((response) => {
+        setTitle(response.data.data[0].attributes.title)
+        setDescription(response.data.data[0].attributes.description)
+        console.log(response.data.data[0].attributes)
+      })
+      .catch((error) => {
+        console.error('Błąd podczas pobierania artykułów:', error)
+      });
+  }, []);
+
   return (
     <LinearGradient 
         style={{
@@ -30,6 +57,10 @@ const Home = ({navigation}:{navigation:any}) => {
             onPress={() => navigation.navigate('Login')}>
             <Text style={{color:COLORS.purple,fontWeight:'bold',fontSize:20}}>Log Out</Text>
           </Pressable>
+        </View>
+        <View>
+            <Text>Title: {title}</Text>
+            <Text>Description: {description}</Text>
         </View>
     </LinearGradient>
   )
