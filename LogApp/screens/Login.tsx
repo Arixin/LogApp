@@ -36,13 +36,10 @@ const Login = ({navigation}:{navigation:any}) => {
       .post(`${BASE_URL}/api/auth/local`,{identifier:username,password:password})
       .then((response:any) => {
         navigation.navigate('Home',{accessToken:response.data.jwt,userId:response.data.user.id})
-        console.log('User profile', response.data.user);
-        console.log('User token', response.data.jwt);
       })
       .catch((error:any) => {
         Alert.alert('Login Failed','Try again')
         console.error('Login Failed',error)
-        console.log(username,password)
       })
 
   }
