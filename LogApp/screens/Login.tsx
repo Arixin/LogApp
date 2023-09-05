@@ -33,15 +33,15 @@ const Login = ({navigation}:{navigation:any}) => {
     }
 
     axios
-      .post(`${BASE_URL}/api/auth/local`,{Username:username,password:password})
+      .post(`${BASE_URL}/api/auth/local`,{identifier:username,password:password})
       .then((response:any) => {
         navigation.navigate('Home')
-        console.log('User profile', response.data.user);
-        console.log('User token', response.data.jwt);
+        console.log("Login Accepted",response.data)
       })
       .catch((error:any) => {
+        Alert.alert('Login Failed','Try again')
+        console.error('Login Failed',error)
         console.log(username,password)
-        console.log('Login failed',error)
       })
 
   }
